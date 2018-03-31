@@ -3,4 +3,4 @@
  * None
 
 #### Works in progress:
- * [fractals](https://nathansolomon1678.github.io/neat-stuff/fractals/fractals.html)
+ * [fractals](https://nathansolomon1678.github.io/neat-stuff/fractals)
