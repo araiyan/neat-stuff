@@ -1,0 +1,41 @@
+<DOCTYPE html>
+<html>
+
+<head>
+<title>Neat Thing</title>
+</head>
+
+<body>
+
+<canvas id="myCanvas" width="1000" height="1000">
+</canvas>
+
+<script type="text/javascript">
+  function square(num) {
+    return num * num;
+  }
+  var canvas = document.getElementById("myCanvas");
+  var canv = canvas.getContext("2d");
+  canv.fillStyle = 'rgba(0, 0, 255, 1)';
+
+  class Line {
+    constructor(firstX, firstY, secondX, secondY) {
+      this.firstX = firstX;
+      this.firstY = firstY;
+      this.secondX = secondX;
+      this.secondY = secondY;
+      this.length = Math.sqrt(square(secondX - firstX) + square(secondY - firstY));
+    }
+    draw() {
+      canv.lineWidth = 0.02 * this.length;
+      canv.moveTo(this.firstX, this.firstY);
+      canv.lineTo(this.secondX, this.secondY);
+      canv.stroke();
+    }
+  }
+  var firstLine = new Line(50, 50, 200, 50);
+  firstLine.draw();
+</script>
+
+</body>
+</html>
