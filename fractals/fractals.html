@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>Neat Thing</title>
+<title>Fractals</title>
 </head>
 
 <body>
@@ -11,12 +11,12 @@
 </canvas>
 
 <script type="text/javascript">
-  function square(num) {
-    return num * num;
-  }
+  function square(num) { return num * num; }
   var canvas = document.getElementById("myCanvas");
   var canv = canvas.getContext("2d");
   canv.fillStyle = 'rgba(0, 0, 255, 1)';
+  var allTheLines = [];
+  var levelsOfDepth = 0;
 
   class Line {
     constructor(firstX, firstY, secondX, secondY) {
@@ -24,17 +24,61 @@
       this.firstY = firstY;
       this.secondX = secondX;
       this.secondY = secondY;
-      this.length = Math.sqrt(square(secondX - firstX) + square(secondY - firstY));
+    }
+    setMagnitudeAndAngle() {
+      this.magnitude = Math.sqrt(square(this.secondX - this.firstX) + square(this.secondY - this.firstY));
+      this.angle = Math.atan((this.secondY - this.firstY) / (this.secondX - this.firstX));
+      console.log(this.magnitude, this.angle);
     }
     draw() {
-      canv.lineWidth = 0.02 * this.length;
+      canv.lineWidth = 0.01 * this.length + 5;  // draw line slightly thicker if the line is longer
       canv.moveTo(this.firstX, this.firstY);
       canv.lineTo(this.secondX, this.secondY);
       canv.stroke();
     }
   }
-  var firstLine = new Line(50, 50, 200, 50);
-  firstLine.draw();
+
+  function becomeMoreLines() {
+    var newLines = [];
+    for (var i = 0; i < allTheLines.length; i++) {
+      allTheLines[i].setMagnitudeAndAngle();
+      var angle = allTheLines[i].angle + (Math.pi / 3);
+      var magnitude = allTheLines[i].magnitude * 1;
+      var firstX = allTheLines[i].firstX;
+      var firstY = allTheLines[i].firstY;
+      var secondX = firstX + (magnitude * Math.cos(angle));
+      var secondY = firstY + (magnitude * Math.sin(angle));
+      var nextLine = new Line(firstX, firstY, secondX, secondY);
+      newLines.push(nextLine);
+
+      allTheLines[i].setMagnitudeAndAngle();
+      angle = allTheLines[i].angle - (Math.pi / 3);
+      magnitude = allTheLines[i].magnitude * 1;
+      firstX = secondX;
+      firstY = secondY;
+      secondX = firstX + (magnitude * Math.cos(angle));
+      secondY = firstY + (magnitude * Math.sin(angle));
+      nextLine = new Line(firstX, firstY, secondX, secondY);
+      newLines.push(nextLine);
+    }
+    return newLines;
+  }
+
+  var firstLine = new Line(100, 100, 500, 100);
+  allTheLines.push(firstLine);
+  console.log(allTheLines.length)
+  for (var i = 0; i < allTheLines.length; i++) {
+    allTheLines[i].draw();
+    console.log(allTheLines[i].magnitude, allTheLines[i].angle);
+  }
+  allTheLines = becomeMoreLines();
+  console.log(allTheLines.length)
+  for (var i = 0; i < allTheLines.length; i++) {
+    allTheLines[i].draw();
+    console.log(allTheLines[i].magnitude, allTheLines[i].angle);
+  }
+  allTheLines = becomeMoreLines();
+
 </script>
 
 </body>
