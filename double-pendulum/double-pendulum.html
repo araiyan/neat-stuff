@@ -16,7 +16,6 @@
 
   var canvas = document.getElementById("myCanvas");
   var canv = canvas.getContext("2d");
-  canv.strokeStyle = "#000000";
 
   var gravity = 1;
   var friction = 0;
@@ -27,6 +26,24 @@
   var angle2 = Math.PI / 2;
   var angularVelocity1 = 0;
   var angularVelocity2 = 0;
+
+  function drawLine(firstX, firstY, secondX, secondY, width, color) {
+    canv.beginPath();
+    canv.strokeStyle = color;
+    canv.lineWidth = width;
+    canv.moveTo(firstX, firstY);
+    canv.lineTo(secondX, secondY);
+    canv.closePath();
+    canv.stroke();
+  }
+
+  function drawCircle(x, y, radius, color) {
+    canv.beginPath();
+    canv.fillStyle = color;
+    canv.arc(x, y, radius, 0, 2 * Math.PI, false);
+    canv.fill();
+    canv.closePath();
+  }
 
   function Update() {
     canv.clearRect(0, 0, 750, 500);
@@ -39,16 +56,15 @@
     angle1 += angularVelocity1 * timeInterval;
     angle2 += angularVelocity2 * timeInterval;
 
-    canv.lineWidth = 10;
-    canv.beginPath();
-
-    canv.moveTo(250, 250);
-    canv.lineTo(250 - 100 * Math.cos(angle1), 250 - 100 * Math.sin(angle1));
-    canv.stroke();
-
-    canv.moveTo(250 - 100 * Math.cos(angle1), 250 - 100 * Math.sin(angle1));
-    canv.lineTo(250 - 100 * (Math.cos(angle1) + Math.cos(angle2)), 250 - 100 * (Math.sin(angle1) + Math.sin(angle2)));
-    canv.stroke();
+    drawLine(250, 250, 250 - 100 * Math.cos(angle1), 250 - 100 * Math.sin(angle1),
+             10, "#000000");
+    drawLine(250 - 100 * Math.cos(angle1), 250 - 100 * Math.sin(angle1),
+             250 - 100 * (Math.cos(angle1) + Math.cos(angle2)), 250 - 100 * (Math.sin(angle1) + Math.sin(angle2)),
+             10, "#000000");
+    drawCircle(250 - 100 * Math.cos(angle1), 250 - 100 * Math.sin(angle1),
+               7, "#002055");
+    drawCircle(250, 250,
+               7, "#002055");
   }
 
   setInterval(Update, timeInterval * 1000);
