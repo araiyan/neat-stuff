@@ -19,8 +19,10 @@
 
   var gravity = 1;
   var friction = 0;
-  var trace = false;
+  var trace = true;
   var timeInterval = 0.01;  // the inverse of speed
+  var pastXCoords = []
+  var pastXCoords = []
 
   var angle1 = Math.PI / 6;
   var angle2 = Math.PI / 3;
@@ -65,6 +67,26 @@
                7, "#002055");
     drawCircle(250, 250,
                7, "#002055");
+
+    // TODO(Nathan) reorganize the logic here
+    if (trace && pastXCoords.length > 5 / timeInterval) {
+      pastXCoords.push(250 - 100 * (Math.cos(angle1) + Math.cos(angle2)));
+      pastYCoords.push(250 - 100 * (Math.sin(angle1) + Math.cos(angle2)));
+    } else if (trace) {
+      for (var i = 0; pastXCoords.length - 1; i++) {
+        pastXCoords[i] = pastXCoords[i+1];
+        pastYCoords[i] = pastYCoords[i+1];
+      }
+      pastXCoords.push(250 - 100 * (Math.cos(angle1) + Math.cos(angle2)));
+      pastYCoords.push(250 - 100 * (Math.sin(angle1) + Math.cos(angle2)));
+    }
+    if (trace) {
+      for (var i = 0; i < pastXCoords.length; i++) {
+        drawLine(pastXCoords[i], pastYCoords[i],
+                 pastXCOords[i+1], pastYCoords[i+1],
+                 10, "rgba(255, 0, 0, 0.5)");
+      }
+    }
   }
 
   setInterval(Update, timeInterval * 1000);
