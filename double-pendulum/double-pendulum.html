@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>Fractals</title>
+<title>Double Pendulum</title>
 </head>
 
 <body>
@@ -16,15 +16,44 @@
 
   var canvas = document.getElementById("myCanvas");
   var canv = canvas.getContext("2d");
+  canv.strokeStyle = "#000000";
 
-  gravity = 0;
-  friction = 0;
-  trace = false;
+  var gravity = 0;
+  var friction = 0;
+  var trace = false;
+  var timeInterval = 0.01;
 
   var angle1 = Math.pi / 4;
   var angle2 = Math.pi / 2;
   var angularVelocity1 = 0;
   var angularVelocity2 = 0;
+
+  function Update() {
+    canv.clearRect(0, 0, 750, 500);
+
+    // TODO(Nathan) check the math here
+    angularVelocity2 -= Math.cos(angle2);
+    angularVelocity1 -= Math.cos(angle1);
+    angularVelocity1 -= Math.cos(angle1) + 0.5 * Math.cos(angle1);
+
+    angle1 += angularVelocity1 * timeInterval;
+    angle2 += angularVelocity2 * timeInterval;
+
+    console.log(angle1, angle2, angularVelocity1, angularVelocity2);  // They're all NaN  :(
+
+    canv.lineWidth = 15;
+    canv.beginPath();
+
+    canv.moveTo(250, 250);
+    canv.lineTo(250 + 100 * Math.cos(angle1), 250 + 100 * Math.sin(angle1));
+    canv.stroke();
+
+    canv.moveTo(250 + 100 * Math.cos(angle1), 250 + 100 * Math.sin(angle1));
+    canv.lineTo(100 * (Math.cos(angle1) + Math.cos(angle2)), 100 * (Math.sin(angle1) + Math.sin(angle2)));
+    canv.stroke();
+  }
+
+  setInterval(Update, timeInterval * 1000);
 
 
 
