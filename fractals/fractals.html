@@ -7,16 +7,21 @@
 
 <body>
 
-<canvas id="myCanvas" width="1000" height="1000">
+<canvas id="myCanvas" width="750" height="500">
 </canvas>
 
 <script type="text/javascript">
+
+
+
   function square(num) { return num * num; }
   var canvas = document.getElementById("myCanvas");
   var canv = canvas.getContext("2d");
-  canv.fillStyle = 'rgba(0, 0, 255, 1)';
   var allTheLines = [];
   var levelsOfDepth = 0;
+
+  console.log(Math.atan2(1, 0));
+  console.log(Math.atan2(0, 1));
 
   class Line {
     constructor(firstX, firstY, secondX, secondY) {
@@ -27,7 +32,8 @@
     }
     setMagnitudeAndAngle() {
       this.magnitude = Math.sqrt(square(this.secondX - this.firstX) + square(this.secondY - this.firstY));
-      this.angle = Math.atan((this.secondY - this.firstY) / (this.secondX - this.firstX));
+      this.angle = Math.atan2(this.secondY - this.firstY, this.secondX - this.firstX);
+      console.log(this.firstX, this.firstY, this.secondX, this.secondY, this.magnitude, this.angle);
     }
     draw() {
       canv.lineWidth = 0.01 * this.length + 5;  // draw line slightly thicker if the line is longer
@@ -49,8 +55,6 @@
       var secondY = firstY + (magnitude * Math.sin(angle));
       var nextLine = new Line(firstX, firstY, secondX, secondY);
       newLines.push(nextLine);
-
-      console.log(firstX, firstY, secondX, secondY, magnitude, angle, allTheLines.length);
 
       allTheLines[i].setMagnitudeAndAngle();
       angle = allTheLines[i].angle - (Math.pi / 3);
@@ -75,6 +79,8 @@
     allTheLines[i].draw();
   }
   allTheLines = becomeMoreLines();
+
+
 
 </script>
 
