@@ -7,7 +7,13 @@
 
 <body>
 
-<canvas id="myCanvas" width="750" height="500">
+<form action="">
+Levels of depth:
+<input id="levels_of_depth" type="number" value="4" max="10" min="0" size="5" required>
+<button id="updateButton" type="button" onclick="drawEverything()">Update</button>
+</form>
+
+<canvas id="myCanvas" width="1000" height="550">
 </canvas>
 
 <script type="text/javascript">
@@ -18,10 +24,6 @@
   var canvas = document.getElementById("myCanvas");
   var canv = canvas.getContext("2d");
   var allTheLines = [];
-  var levelsOfDepth = 0;
-
-  console.log(Math.atan2(1, 0));
-  console.log(Math.atan2(0, 1));
 
   class Line {
     constructor(firstX, firstY, secondX, secondY) {
@@ -33,10 +35,9 @@
     setMagnitudeAndAngle() {
       this.magnitude = Math.sqrt(square(this.secondX - this.firstX) + square(this.secondY - this.firstY));
       this.angle = Math.atan2(this.secondY - this.firstY, this.secondX - this.firstX);
-      console.log(this.firstX, this.firstY, this.secondX, this.secondY, this.magnitude, this.angle);
     }
     draw() {
-      canv.lineWidth = 0.01 * this.length + 5;  // draw line slightly thicker if the line is longer
+      canv.lineWidth = 3;
       canv.moveTo(this.firstX, this.firstY);
       canv.lineTo(this.secondX, this.secondY);
       canv.stroke();
@@ -47,8 +48,8 @@
     var newLines = [];
     for (var i = 0; i < allTheLines.length; i++) {
       allTheLines[i].setMagnitudeAndAngle();
-      var angle = allTheLines[i].angle + (Math.pi / 3);
-      var magnitude = allTheLines[i].magnitude * 1;
+      var angle = allTheLines[i].angle + (Math.PI / 4);
+      var magnitude = allTheLines[i].magnitude * Math.sqrt(0.5);
       var firstX = allTheLines[i].firstX;
       var firstY = allTheLines[i].firstY;
       var secondX = firstX + (magnitude * Math.cos(angle));
@@ -57,8 +58,8 @@
       newLines.push(nextLine);
 
       allTheLines[i].setMagnitudeAndAngle();
-      angle = allTheLines[i].angle - (Math.pi / 3);
-      magnitude = allTheLines[i].magnitude * 1;
+      angle = allTheLines[i].angle - (Math.PI / 4);
+      magnitude = allTheLines[i].magnitude * Math.sqrt(0.5);
       firstX = secondX;
       firstY = secondY;
       secondX = firstX + (magnitude * Math.cos(angle));
@@ -69,16 +70,22 @@
     return newLines;
   }
 
-  var firstLine = new Line(100, 100, 500, 100);
-  allTheLines.push(firstLine);
-  for (var i = 0; i < allTheLines.length; i++) {
-    allTheLines[i].draw();
+  function drawEverything() {
+    var levelsOfDepth = document.getElementById("levels_of_depth").value;
+    canv.clearRect(0, 0, canvas.width, canvas.height);
+    var firstLine = new Line(200, 100, 600, 100);
+    allTheLines = [firstLine];
+    for (var i = 0; i < levelsOfDepth; i++) {
+      canv.clearRect(0, 0, canvas.width, canvas.height);
+      for (var j = 0; j < allTheLines.length; j++) {
+        allTheLines[j].draw();
+      }
+      allTheLines = becomeMoreLines();
+    }
+    console.log(levelsOfDepth);
   }
-  allTheLines = becomeMoreLines();
-  for (var i = 0; i < allTheLines.length; i++) {
-    allTheLines[i].draw();
-  }
-  allTheLines = becomeMoreLines();
+
+  drawEverything();
 
 
 
