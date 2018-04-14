@@ -1,4 +1,4 @@
-## Cool programs with which you can mess around
+## A collection of neat interactive programs
 #### Programs that currently work:
  * None
 
