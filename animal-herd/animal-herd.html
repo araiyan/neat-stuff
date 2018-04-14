@@ -48,18 +48,19 @@
     move() {
       this.angle += randomness * randomNumber(-1, 1) * timeInterval;
       this.angle = wrapAngle(this.angle);
-      this.xCoord += Math.cos(this.angle);
-      this.yCoord += Math.sin(this.angle);
+      this.xCoord += Math.cos(this.angle) * speed * timeInterval;
+      this.yCoord += Math.sin(this.angle) * speed * timeInterval;
     }
     draw() {
-      drawCircle(this.xCoord, this.yCoord, this.size, "#2000ff");
+      drawCircle(this.xCoord, this.yCoord, size, "#2000ff");
+      // TODO(Nathan) use HSV to make color depend on angle, like in Orli's flock&roll
     }
   }
 
   // the next few numbers are the same for all animals in the herd
-  var speed = 100;  // pixels per second
+  var speed = 30;  // pixels per second
   var randomness = 1;  // how much the angle randomly changes
-  var size = 3;  // radius in pixels. Animals can't go inside other animals.
+  var size = 5;  // radius in pixels. Animals can't go inside other animals.
   var alignmentRadius;  // animals adjust their angle to be the same as the angles of others within this radius
   var attractionRadius;  // animals turn towards other animals within this radius
 
@@ -79,7 +80,6 @@
     for (var i = 0; i < animals.length; i++) {
       animals[i].move();
       animals[i].draw();
-      console.log(animals[i].x, animals[i].y, animals[i].angle);
     }
   }
 
