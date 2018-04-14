@@ -1,0 +1,94 @@
+<DOCTYPE html>
+<html>
+
+<head>
+<title>Animal herd</title>
+</head>
+
+<body>
+
+<canvas id="myCanvas" width="750" height="550">
+</canvas>
+
+<script type="text/javascript">
+
+
+
+  var canvas = document.getElementById("myCanvas");
+  var canv = canvas.getContext("2d");
+
+  function drawCircle(x, y, radius, color) {
+    canv.beginPath();
+    canv.fillStyle = color;
+    canv.arc(x, y, radius, 0, 2 * Math.PI, false);
+    canv.fill();
+    canv.closePath();
+  }
+
+  function wrapAngle(angle) {
+    if (angle >= Math.PI * 2) {
+      angle -= Math.PI * 2;
+    } else if (angle <= 0) {
+      angle += Math.PI * 2;
+    }
+    return angle;
+  }
+
+  function randomNumber(min, max) {
+    return min + (max - min) * Math.random();
+  }
+
+  var animals = [];
+  class Animal {
+    constructor(xCoord, yCoord, angle) {
+      this.xCoord = xCoord;
+      this.yCoord = yCoord;
+      this.angle = angle;
+    }
+    move() {
+      this.angle += randomness * randomNumber(-1, 1) * timeInterval;
+      this.angle = wrapAngle(this.angle);
+      this.xCoord += Math.cos(this.angle);
+      this.yCoord += Math.sin(this.angle);
+    }
+    draw() {
+      drawCircle(this.xCoord, this.yCoord, this.size, "#2000ff");
+    }
+  }
+
+  // the next few numbers are the same for all animals in the herd
+  var speed = 100;  // pixels per second
+  var randomness = 1;  // how much the angle randomly changes
+  var size = 3;  // radius in pixels. Animals can't go inside other animals.
+  var alignmentRadius;  // animals adjust their angle to be the same as the angles of others within this radius
+  var attractionRadius;  // animals turn towards other animals within this radius
+
+  // start the simulation by creating a bunch of animals with random states
+  for (var i = 1; i <= 10; i++) {
+    var x = randomNumber(10, 740);
+    var y = randomNumber(10, 540);
+    var angle = randomNumber(0, 2 * Math.PI);
+    newAnimal = new Animal(x, y, angle);
+    animals.push(newAnimal);
+  }
+
+  function Update() {
+    canv.clearRect(0, 0, 750, 550);
+    canv.lineWidth = 3;
+    canv.strokeRect(10, 10, 740, 540);
+    for (var i = 0; i < animals.length; i++) {
+      animals[i].move();
+      animals[i].draw();
+      console.log(animals[i].x, animals[i].y, animals[i].angle);
+    }
+  }
+
+  var timeInterval = 0.01  // seconds
+  setInterval(Update, timeInterval * 1000);
+
+
+
+</script>
+
+</body>
+</html>
